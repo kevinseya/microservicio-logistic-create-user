@@ -2,7 +2,6 @@ package com.microserviciologistic.createuser;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-<<<<<<< HEAD
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -14,18 +13,11 @@ public class CreateUserApplication {
 
         SpringApplication.run(CreateUserApplication.class, args);
     }
+
     @GetMapping("/")
     public String redirectToSwagger() {
         return "redirect:/swagger-ui.html";
     }
-=======
 
-@SpringBootApplication
-public class CreateUserApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(CreateUserApplication.class, args);
-    }
->>>>>>> origin/test
 
 }
