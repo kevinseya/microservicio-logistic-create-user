@@ -28,7 +28,7 @@ This project is a simple REST API created with Spring Boot that allows managing 
 
 3. The application run on: `http://localhost:8080`.
 
-## Uso de los Endpoints
+## Use of endpoint
 
 ### 1. POST /api/users/create
 
@@ -45,7 +45,7 @@ POST /api/users/create Content-Type: application/json
     "rol": "ADMIN" 
     }
 ```
-**Respuesta:**
+**Response:**
 ```plaintext
     {
         "id": "550e8400-e29b-41d4-a716-446655440000",
