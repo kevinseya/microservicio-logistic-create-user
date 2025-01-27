@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,17 +31,17 @@ public class UserController {
             @ApiResponse(responseCode = "201", description = "User created successfully"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         try {
-            System.out.println("Recibido: " + user.getEmail());
+            System.out.println("Received: " + user.getEmail());
             User createdUser = userService.createUser(user);
             return ResponseEntity.status(201).body(createdUser);
         } catch (Exception e) {
-            System.err.println("Error al crear el usuario: " + e.getMessage());
+            System.err.println("Error creating user: " + e.getMessage());
 
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Error al crear el usuario: " + e.getMessage(),e
+                    "Error creating user: " + e.getMessage(),e
             );
         }
     }
