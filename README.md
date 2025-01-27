@@ -7,7 +7,7 @@ This project is a simple REST API created with Spring Boot that allows managing 
       
 - `POSTT /api/users/create`: Allows you to create the user, under the required columns.
 
-## Requisitos
+## Requirements
 
 - **JDK 17** o superior.
 - **Maven** (for dependency management and project construction).
@@ -57,5 +57,5 @@ POST /api/users/create Content-Type: application/json
     }
 ```
 **Response code:**
-- 201 Created: User created successfully.
-- 500 Internal Server Error: Server error.
+- **`201 Created:`** User created successfully.
+- **`500 Internal Server Error:`** Server error.
