@@ -48,7 +48,7 @@ jobs:
             docker pull kevinseya/logistic_create_user:latest
 
             # 3) Detener y eliminar el contenedor anterior
-            sudo docker stop logistic_create_user || true
+            sudo docker ps -q -f name=logistic_create_user && sudo docker stop logistic_create_user
             sudo docker rm logistic_create_user || true
 
             # 4) Generar .env con secretos
@@ -59,10 +59,11 @@ jobs:
             echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
             echo "PORT=${{ secrets.PORT }}" >> .env
             # Agrega más variables si requieres
-
+            cat .env
+          
             # 5) Correr contenedor usando ese .env
             sudo docker run -d --name logistic_create_user \
               --env-file .env \
               -p 8080:8080 \
-              kevinseya/logistic_create_user:latest
+              kevinseya/logistic_create_user:latest || (echo "Error al ejecutar el contenedor." && exit 1)
           EOF
