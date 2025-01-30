@@ -14,40 +14,42 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "BINARY(16)", unique = true, nullable = false)    @Schema(description = "Unique identifier for the user",
-            example = "550e8400-e29b-41d4-a716-446655440000",
-            accessMode = Schema.AccessMode.READ_ONLY)
+    @Column(columnDefinition = "BINARY(16)", unique = true, nullable = false)
+    @Schema(description = "Unique identifier for the user", example = "550e8400-e29b-41d4-a716-446655440000", accessMode = Schema.AccessMode.READ_ONLY)
     private UUID id;
 
-    @Column(nullable = false)
     @NotBlank(message = "Name is required")
+    @Column(nullable = false)
     @Schema(description = "Name of the user", example = "John", required = true)
     private String name;
 
-    @Column(nullable = false)
     @NotBlank(message = "Lastname is required")
+    @Column(nullable = false)
     @Schema(description = "Lastname of the user", example = "Doe", required = true)
     private String lastname;
 
-    @Column(nullable = false)
     @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is required")
+    @Column(nullable = false, unique = true)
     @Schema(description = "Email of the user", example = "john.doe@example.com", required = true)
     private String email;
 
-    @Column(nullable = false)
     @Pattern(regexp = "^\\d{10}$", message = "Phone number must have 10 digits")
+    @NotBlank(message = "Phone number is required")
+    @Column(nullable = false, unique = true)
     @Schema(description = "Phone number of the user", example = "1234567890", required = true)
     private String phone;
 
-    @Column(nullable = false)
     @Size(min = 6, message = "Password must have at least 6 characters")
+    @NotBlank(message = "Password is required")
+    @Column(nullable = false)
     @Schema(description = "Password of the user", example = "securePassword123", required = true)
     private String password;
 
-    @Column(nullable = false)
     @NotBlank(message = "Role is required")
+    @Column(nullable = false)
     @Schema(description = "Role of the user", example = "ADMIN", required = true)
-    private String rol;
+    private String role;
 
 
     public UUID getId() {
@@ -103,12 +105,12 @@ public class User {
         this.password = password;
     }
 
-    // Getter y Setter para rol
-    public String getRol() {
-        return rol;
+    // Getter y Setter para role
+    public String getRole() {
+        return role;
     }
 
-    public void setRol(String rol) {
-        this.rol = rol;
+    public void setRole(String role) {
+        this.role = role;
     }
 }
