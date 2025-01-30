@@ -36,8 +36,8 @@ jobs:
             if ! command -v docker &> /dev/null
             then
               echo "Docker no está instalado. Procediendo con la instalación..."
-              sudo apt-get update
-              sudo apt-get install -y docker.io
+              sudo yum update -y
+              sudo yum install -y docker         
               sudo systemctl start docker
               sudo systemctl enable docker
             else
