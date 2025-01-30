@@ -1,5 +1,5 @@
 # Usar una imagen base con OpenJDK 17
-FROM openjdk:17-slim
+FROM openjdk:17-slim AS build
 
 # Definir el directorio de trabajo
 WORKDIR /app
@@ -14,11 +14,17 @@ RUN apt-get update && apt-get install -y maven && \
 # Copiar el código fuente
 COPY src ./src
 
-# Construir la aplicación
+# Construir la aplicación (asegurándonos de crear el JAR en el directorio correcto)
 RUN mvn clean package -DskipTests
 
-# Copiar el archivo JAR generado
-COPY target/*.jar app.jar
+# Segunda etapa para ejecutar la aplicación
+FROM openjdk:17-slim
+
+# Definir el directorio de trabajo
+WORKDIR /app
+
+# Copiar el archivo JAR generado en la fase anterior
+COPY --from=build /app/target/*.jar app.jar
 
 # Exponer el puerto en el que corre la aplicación
 EXPOSE 8080
