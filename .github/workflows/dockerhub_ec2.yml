@@ -31,8 +31,8 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            # 1) Bajar la imagen de Docker Hub
-            docker pull kevinseya/microservice-create-user:latest
+            # 1) Bajar la imagen de Docker Hub.
+            docker pull kevinseya/logistic_create_user:latest
 
             # 2) Detener y eliminar contenedor previo
             docker stop logistic_create_user || true
@@ -51,4 +51,4 @@ jobs:
             docker run -d --name logistic_create_user \
               --env-file .env \
               -p 8080:8080 \
-              kevinseya/microservice-create-product:latest
+              kevinseya/logistic_create_user:latest
