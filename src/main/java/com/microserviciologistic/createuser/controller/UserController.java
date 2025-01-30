@@ -13,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * REST Controller for managing user-related operations.
+ */
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "Users", description = "Endpoints for create users")
@@ -25,10 +28,17 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Endpoint to create a new user.
+     *
+     * @param user The user data sent in the request body.
+     * @return ResponseEntity with the created user and status code 201 (Created).
+     */
     @PostMapping("/create")
     @Operation(summary = "Create user", description = "Endpoint to create users.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid user data"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
