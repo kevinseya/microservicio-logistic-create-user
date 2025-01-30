@@ -42,7 +42,7 @@ POST /api/users/create Content-Type: application/json
     "email": "john.doe@example.com",
     "phone": "1234567890",
     "password": "securePassword123",
-    "rol": "ADMIN" 
+    "role": "ADMIN" 
     }
 ```
 **Response:**
@@ -53,7 +53,7 @@ POST /api/users/create Content-Type: application/json
         "lastname": "Doe",
         "email": "john.doe@example.com",
         "phone": "1234567890",
-        "rol": "ADMIN"
+        "role": "ADMIN"
     }
 ```
 **Response code:**

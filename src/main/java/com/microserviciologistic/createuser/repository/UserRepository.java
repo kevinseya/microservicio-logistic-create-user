@@ -5,6 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+/**
+ * Repository interface for managing User entities.
+ *
+ * - Extends JpaRepository to provide CRUD operations.
+ * - Uses UUID as the primary key type.
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 }
