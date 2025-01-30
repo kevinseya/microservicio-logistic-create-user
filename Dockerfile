@@ -23,6 +23,9 @@ FROM openjdk:17-slim
 # Definir el directorio de trabajo
 WORKDIR /app
 
+# Verificar que el archivo JAR existe (esto es útil para depuración)
+RUN ls /app/target/
+
 # Copiar el archivo JAR generado en la fase anterior
 COPY --from=build /app/target/*.jar app.jar
 
