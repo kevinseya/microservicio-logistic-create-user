@@ -57,8 +57,6 @@ jobs:
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
             echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
             echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-            echo "PORT=${{ secrets.PORT }}" >> .env
-            # Agrega más variables si requieres
             cat .env
           
             # 5) Correr contenedor usando ese .env
