@@ -1,24 +1,27 @@
-# Usar una imagen base con OpenJDK
+# Usar una imagen base con OpenJDK 17
 FROM openjdk:17-slim
 
-# Instalar Maven
-RUN apt-get update && apt-get install -y maven
-
-# Establecer el directorio de trabajo
+# Definir el directorio de trabajo
 WORKDIR /app
 
-# Copiar el archivo pom.xml y descargar las dependencias de Maven
-COPY pom.xml .
-RUN mvn dependency:go-offline
+# Copiar archivos de configuración del proyecto
+COPY pom.xml ./
 
-# Copiar el código fuente de la aplicación
-COPY src /app/src
+# Descargar dependencias usando Maven
+RUN apt-get update && apt-get install -y maven && \
+    mvn dependency:resolve
 
-# Compilar y empaquetar la aplicación
+# Copiar el código fuente
+COPY src ./src
+
+# Construir la aplicación
 RUN mvn clean package -DskipTests
 
-# Exponer el puerto en el que la aplicación correrá
+# Copiar el archivo JAR generado
+COPY target/*.jar app.jar
+
+# Exponer el puerto en el que corre la aplicación
 EXPOSE 8080
 
 # Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "/app/target/logistic_create_user-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "app.jar"]
