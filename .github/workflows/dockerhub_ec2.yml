@@ -24,14 +24,15 @@ jobs:
     needs: build-and-push-image
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@v0.1.10
+      - name: Set up SSH key for EC2 access
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          host: ${{ secrets.EC2_PUBLIC_DNS }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script: |
-            # Verificar si Docker está instalado, si no, instalarlo.
+          ssh-private-key: ${{ secrets.EC2_PRIVATE_KEY }}
+
+      - name: SSH into EC2 and deploy container
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_DNS }} << 'EOF'
+            # 1) Verificar si Docker está instalado, si no, instalarlo.
             if ! command -v docker &> /dev/null
             then
               echo "Docker no está instalado. Procediendo con la instalación..."
@@ -43,17 +44,14 @@ jobs:
               echo "Docker ya está instalado."
             fi
 
-            # Verificar si Docker está corriendo, sino arrancarlo
-            if ! sudo systemctl is-active --quiet docker; then
-              echo "Docker no está corriendo. Iniciando Docker..."
-              sudo systemctl start docker
-            fi
+            # 2) Bajar la imagen de Docker Hub
+            docker pull kevinseya/logistic_create_user:latest
 
-            # Detener y eliminar contenedor previo
+            # 3) Detener y eliminar el contenedor anterior
             sudo docker stop logistic_create_user || true
             sudo docker rm logistic_create_user || true
 
-            # Generar .env con secretos
+            # 4) Generar .env con secretos
             echo "DB_HOST=${{ secrets.DB_HOST }}" > .env
             echo "DB_USER=${{ secrets.DB_USER }}" >> .env
             echo "DB_PASS=${{ secrets.DB_PASS }}" >> .env
@@ -62,8 +60,9 @@ jobs:
             echo "PORT=${{ secrets.PORT }}" >> .env
             # Agrega más variables si requieres
 
-            # Correr contenedor usando ese .env
+            # 5) Correr contenedor usando ese .env
             sudo docker run -d --name logistic_create_user \
               --env-file .env \
               -p 8080:8080 \
               kevinseya/logistic_create_user:latest
+          EOF
