@@ -3,6 +3,7 @@ package com.microserviciologistic.createuser.service;
 import com.microserviciologistic.createuser.model.User;
 import com.microserviciologistic.createuser.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
+    @Value("${webhook.url}")
+    private String webhookUrl;
 
     @Autowired
     public UserService(UserRepository userRepository, RestTemplate restTemplate) {
@@ -25,16 +28,16 @@ public class UserService {
 
     public User createUser(User user) {
         if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            throw new IllegalArgumentException("Email no puede ser nulo o vacío.");
+            throw new IllegalArgumentException("Email cannot be null or empty.");
         }
 
         try {
-            System.out.println("Guardando el usuario en la base de datos: " + user);
+            System.out.println("Save user on database: " + user);
             User createdUser = userRepository.save(user);
             notifyWebhook(createdUser);
             return createdUser;
         } catch (DataAccessException e) {
-            System.err.println("Error al guardar el usuario: " + e.getMessage());
+            System.err.println("Error to save user: " + e.getMessage());
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
                     "Error connecting to the database",
@@ -45,7 +48,6 @@ public class UserService {
 
     private void notifyWebhook(User user) {
         try {
-            String webhookUrl = "http://localhost:5000/webhook_create_user";
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
@@ -53,23 +55,17 @@ public class UserService {
             String jsonBody = String.format("{\"user_id\": \"%s\", \"name\": \"%s\", \"lastname\": \"%s\", \"email\": \"%s\", \"role\": \"%s\", \"message\": \"Usuario creado exitosamente\", \"date\": \"%s\"}",
                     user.getId(), user.getName(), user.getLastname(), user.getEmail(), user.getRole(), Instant.now().toString());
 
-
-            // Envío de la solicitud POST con el cuerpo y las cabeceras
             HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
-
-            // Realiza la solicitud POST al webhook y obtiene la respuesta
             ResponseEntity<String> response = restTemplate.exchange(webhookUrl, HttpMethod.POST, request, String.class);
 
-            // Verificar el código de estado HTTP
             if (response.getStatusCode() == HttpStatus.CREATED) {
-                System.out.println("Notificación enviada correctamente.");
+                System.out.println("Notification sent correctly.");
             } else {
-                System.err.println("Error al enviar la notificación al webhook: " + response.getStatusCode());
+                System.err.println("Error at sent notification on webhook: " + response.getStatusCode());
             }
-
         } catch (Exception e) {
-            System.err.println("Error al enviar la notificación al webhook: " + e.getMessage());
-            e.printStackTrace(); // Imprimir el stack trace para un mejor diagnóstico
+            System.err.println("Error at sent notification on webhook: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
