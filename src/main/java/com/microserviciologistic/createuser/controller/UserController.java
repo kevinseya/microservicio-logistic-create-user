@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,13 @@ import org.springframework.web.server.ResponseStatusException;
  */
 @RestController
 @RequestMapping("/api/users")
-@Tag(name = "Users", description = "Endpoints for create users")
+@Tag(name = "Users", description = "Endpoints for creating users")
 public class UserController {
 
     private final UserService userService;
+
+    @Value("${webhook.url}")
+    private String webhookUrl;
 
     @Autowired
     public UserController(UserService userService) {
@@ -43,7 +47,9 @@ public class UserController {
     })
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         try {
-            System.out.println("Received: " + user.getEmail());
+            System.out.println("Received user: " + user.getEmail());
+            System.out.println("Webhook URL in use: " + webhookUrl);
+
             User createdUser = userService.createUser(user);
             return ResponseEntity.status(201).body(createdUser);
         } catch (Exception e) {
@@ -51,7 +57,7 @@ public class UserController {
 
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Error creating user: " + e.getMessage(),e
+                    "Error creating user: " + e.getMessage(), e
             );
         }
     }
