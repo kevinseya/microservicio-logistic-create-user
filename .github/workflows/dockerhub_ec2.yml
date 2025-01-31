@@ -45,11 +45,11 @@ jobs:
             fi
 
             # Bajar la imagen
-            docker pull kevinseya/logistic_create_user:latest
+            sudo docker pull kevinseya/logistic_create_user:latest
 
             # Detener y eliminar contenedor anterior
-            docker stop logistic_create_user || true
-            docker rm logistic_create_user || true
+            sudo docker stop logistic_create_user || true
+            sudo docker rm logistic_create_user || true
 
             # Generar archivo .env
             echo "DB_IP=${{ secrets.DB_IP }}" > .env
@@ -59,7 +59,7 @@ jobs:
             echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
 
             # Ejecutar nuevo contenedor
-            docker run -d --name logistic_create_user \
+            sudo docker run -d --name logistic_create_user \
               --env-file .env \
               -p 8080:8080 \
               kevinseya/logistic_create_user:latest
