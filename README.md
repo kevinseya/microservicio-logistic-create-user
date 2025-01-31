@@ -7,7 +7,7 @@ This project is a simple REST API created with Spring Boot that allows managing 
       
 - `POSTT /api/users/create`: Allows you to create the user, under the required columns.
 
-## Requirements
+## Requirements.
 
 - **JDK 17** o superior.
 - **Maven** (for dependency management and project construction).
