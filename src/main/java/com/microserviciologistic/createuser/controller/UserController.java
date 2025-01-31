@@ -46,6 +46,7 @@ public class UserController {
     })
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         try {
+            System.out.println("Entered the createUser method.");
             System.out.println("Received user: " + user.getEmail());
             System.out.println("Webhook URL in use: " + webhookUrl);
 
