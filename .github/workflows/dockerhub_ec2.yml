@@ -2,7 +2,7 @@ name: CI/CD to EC2
 
 on:
   push:
-    branches: [ "test" ]
+    branches: ["test"]
 
 jobs:
   build-and-push-image:
@@ -15,10 +15,14 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker Image
-        run: docker build -t kevinseya/logistic_create_user:latest .
+        run: |
+          echo "Building Docker image..."
+          docker build -t kevinseya/logistic_create_user:latest .
 
       - name: Push Docker Image
-        run: docker push kevinseya/logistic_create_user:latest
+        run: |
+          echo "Pushing Docker image to Docker Hub..."
+          docker push kevinseya/logistic_create_user:latest
 
   deploy-to-ec2:
     needs: build-and-push-image
@@ -45,23 +49,28 @@ jobs:
             fi
 
             # 2) Bajar la imagen de Docker Hub
+            echo "Pulling Docker image from Docker Hub..."
             docker pull kevinseya/logistic_create_user:latest
 
-            # 3) Detener y eliminar el contenedor anterior
+            # 3) Detener y eliminar el contenedor anterior si existe
+            echo "Stopping and removing old container..."
             sudo docker ps -q -f name=logistic_create_user && sudo docker stop logistic_create_user
             sudo docker rm logistic_create_user || true
 
-            # 4) Generar .env con secretos
+            # 4) Generar .env con secretos (configuración de base de datos)
+            echo "Creating .env file with secrets..."
             echo "DB_IP=${{ secrets.DB_IP }}" > .env
             echo "DB_USER=${{ secrets.DB_USER }}" >> .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
             echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
             echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
             cat .env
-          
-            # 5) Correr contenedor usando ese .env
+
+            # 5) Correr contenedor usando el archivo .env generado
+            echo "Running the new Docker container..."
             sudo docker run -d --name logistic_create_user \
               --env-file .env \
               -p 8080:8080 \
               kevinseya/logistic_create_user:latest || (echo "Error al ejecutar el contenedor." && exit 1)
+
           EOF
