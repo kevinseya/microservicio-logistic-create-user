@@ -1,6 +1,5 @@
 package com.microserviciologistic.createuser;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
@@ -22,9 +21,6 @@ public class CreateUserApplication {
      * @param args Command-line arguments.
      */
     public static void main(String[] args) {
-
-        Dotenv dotenv = Dotenv.load();
-        System.setProperty("URL_WEBHOOK", dotenv.get("URL_WEBHOOK"));
 
         SpringApplication.run(CreateUserApplication.class, args);
     }
