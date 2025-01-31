@@ -24,8 +24,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @Value("${webhook.url}")
-    private String webhookUrl;
+    private String webhookUrl= "http://107.22.80.110:5000/webhook_create_user";
 
     @Autowired
     public UserController(UserService userService) {
