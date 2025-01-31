@@ -1,7 +1,7 @@
 FROM maven:3.8.3-openjdk-17 AS builder
 COPY . /app
 WORKDIR /app
-RUN mvn -f /app/pom.xml clean package -DskipTests
+RUN mvn clean package -DskipTests
 
 FROM openjdk:17.0.1-jdk-slim
 
