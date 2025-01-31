@@ -23,10 +23,11 @@ public class UserService {
 
     @Autowired
     public UserService(UserRepository userRepository, RestTemplate restTemplate,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder, @Value("${webhook.url}") String webhookUrl) {
         this.userRepository = userRepository;
         this.restTemplate = restTemplate;
         this.passwordEncoder = passwordEncoder;
+        this.webhookUrl = webhookUrl;
     }
 
     public User createUser(User user) {
