@@ -18,8 +18,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
     private final PasswordEncoder passwordEncoder;
-    private String webhookUrl = "http://23.22.142.172:5000/webhook_create_user";
-
+    @Value("${webhook.url}")
+    private String webhookUrl;
     @Autowired
     public UserService(UserRepository userRepository, RestTemplate restTemplate,
                        PasswordEncoder passwordEncoder) {
@@ -59,6 +59,7 @@ public class UserService {
                     user.getId(), user.getName(), user.getLastname(), user.getEmail(), user.getRole(), Instant.now().toString());
 
             HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
+            System.out.println("******Intentando conectar a webhook URL: " + webhookUrl);
             ResponseEntity<String> response = restTemplate.exchange(webhookUrl, HttpMethod.POST, request, String.class);
 
             if (response.getStatusCode() == HttpStatus.CREATED) {
