@@ -12,7 +12,7 @@ This project is a simple REST API created with Spring Boot that allows managing 
 - **JDK 17** o superior.
 - **Maven** (for dependency management and project construction).
 
-## Installation
+## Installation.
 
 1. **Clone the repository.**
 
