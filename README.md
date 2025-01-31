@@ -14,7 +14,7 @@ This project is a simple REST API created with Spring Boot that allows managing 
 
 ## Installation
 
-1. **Clone the repository**
+1. **Clone the repository.**
 
     ```bash
     git clone <https://github.com/kevinseya/microservicio-logistic-create-user.git>
