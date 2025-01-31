@@ -36,41 +36,31 @@ jobs:
       - name: SSH into EC2 and deploy container
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_DNS }} << 'EOF'
-            # 1) Verificar si Docker está instalado, si no, instalarlo.
-            if ! command -v docker &> /dev/null
-            then
-              echo "Docker no está instalado. Procediendo con la instalación..."
+            # Verificar e instalar Docker si es necesario
+            if ! command -v docker &> /dev/null; then
               sudo yum update -y
-              sudo yum install -y docker         
+              sudo yum install -y docker
               sudo systemctl start docker
               sudo systemctl enable docker
-            else
-              echo "Docker ya está instalado."
             fi
 
-            # 2) Bajar la imagen de Docker Hub
-            echo "Pulling Docker image from Docker Hub..."
+            # Bajar la imagen
             docker pull kevinseya/logistic_create_user:latest
 
-            # 3) Detener y eliminar el contenedor anterior si existe
-            echo "Stopping and removing old container..."
-            sudo docker ps -q -f name=logistic_create_user && sudo docker stop logistic_create_user
-            sudo docker rm logistic_create_user || true
+            # Detener y eliminar contenedor anterior
+            docker stop logistic_create_user || true
+            docker rm logistic_create_user || true
 
-            # 4) Generar .env con secretos (configuración de base de datos)
-            echo "Creating .env file with secrets..."
+            # Generar archivo .env
             echo "DB_IP=${{ secrets.DB_IP }}" > .env
             echo "DB_USER=${{ secrets.DB_USER }}" >> .env
             echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
             echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
             echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-            cat .env
 
-            # 5) Correr contenedor usando el archivo .env generado
-            echo "Running the new Docker container..."
-            sudo docker run -d --name logistic_create_user \
+            # Ejecutar nuevo contenedor
+            docker run -d --name logistic_create_user \
               --env-file .env \
               -p 8080:8080 \
-              kevinseya/logistic_create_user:latest || (echo "Error al ejecutar el contenedor." && exit 1)
-
+              kevinseya/logistic_create_user:latest
           EOF

@@ -1,5 +1,5 @@
 FROM maven:3.8.3-openjdk-17 AS builder
-COPY . /app
+ADD . /app
 WORKDIR /app
 RUN mvn clean package -DskipTests
 
