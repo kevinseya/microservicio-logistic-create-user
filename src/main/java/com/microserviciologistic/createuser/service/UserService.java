@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.time.Instant;
 
 @Service
@@ -17,13 +17,16 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
+    private final PasswordEncoder passwordEncoder;
     @Value("${webhook.url}")
     private String webhookUrl;
 
     @Autowired
-    public UserService(UserRepository userRepository, RestTemplate restTemplate) {
+    public UserService(UserRepository userRepository, RestTemplate restTemplate,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.restTemplate = restTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User createUser(User user) {
@@ -32,6 +35,7 @@ public class UserService {
         }
 
         try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             System.out.println("Save user on database: " + user);
             User createdUser = userRepository.save(user);
             notifyWebhook(createdUser);
