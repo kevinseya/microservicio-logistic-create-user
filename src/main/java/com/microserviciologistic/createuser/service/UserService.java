@@ -19,7 +19,7 @@ public class UserService {
     private final RestTemplate restTemplate;
     private final PasswordEncoder passwordEncoder;
 
-    private String webhookUrl="http://3.89.186.179:5000/webhook_create_user";
+    private String webhookUrl="http://35.174.111.175:5000/webhook_create_user";
     @Autowired
     public UserService(UserRepository userRepository, RestTemplate restTemplate,
                        PasswordEncoder passwordEncoder) {
