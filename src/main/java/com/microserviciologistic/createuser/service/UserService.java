@@ -18,13 +18,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
     private final PasswordEncoder passwordEncoder;
+    private final WebSocketClientService webSocketClientService;
 
     private String webhookUrl="http://18.234.163.20:5000/webhook_create_user";
     @Autowired
-    public UserService(UserRepository userRepository, RestTemplate restTemplate,
+    public UserService(UserRepository userRepository, WebSocketClientService webSocketClientService, RestTemplate restTemplate,
                        PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.restTemplate = restTemplate;
+        this.webSocketClientService = webSocketClientService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -37,6 +39,9 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             System.out.println("Save user on database: " + user);
             User createdUser = userRepository.save(user);
+            //EVENT WEBSOCKET
+            System.out.println("Enviando evento WebSocket para creación de usuario...");
+            webSocketClientService.sendEvent("CREATE", createdUser);
             notifyWebhook(createdUser);
             return createdUser;
         } catch (DataAccessException e) {
