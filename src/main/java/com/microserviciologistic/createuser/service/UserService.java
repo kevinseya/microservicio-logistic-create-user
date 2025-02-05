@@ -36,6 +36,9 @@ public class UserService {
         }
 
         try {
+            if(user.getActive() == null) {
+                user.setActive(true);
+            }
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             System.out.println("Save user on database: " + user);
             User createdUser = userRepository.save(user);

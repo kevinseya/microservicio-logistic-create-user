@@ -51,6 +51,10 @@ public class User {
     @Schema(description = "Role of the user", example = "ADMIN", required = true)
     private String role;
 
+    @Column(nullable = false)
+    @Schema(description = "Indica si el usuario está activo o inactivo", example = "true")
+    private Boolean active = true;
+
 
     public UUID getId() {
         return id;
@@ -113,4 +117,9 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    //Getter y Setter para active
+    public Boolean getActive() { return active; }
+
+    public void setActive(Boolean active) { this.active = active; }
 }
