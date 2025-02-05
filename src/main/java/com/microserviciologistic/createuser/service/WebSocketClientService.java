@@ -10,7 +10,7 @@ import java.net.URI;
 @Service
 public class WebSocketClientService {
 
-    private static final String WEBSOCKET_URL = "ws://localhost:5001/ws";
+    private static final String WEBSOCKET_URL = "ws://34.224.173.116:5001/ws";
     private PlainWebSocketClient webSocketClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
