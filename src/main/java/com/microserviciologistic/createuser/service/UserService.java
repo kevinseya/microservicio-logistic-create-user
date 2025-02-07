@@ -19,8 +19,8 @@ public class UserService {
     private final RestTemplate restTemplate;
     private final PasswordEncoder passwordEncoder;
     private final WebSocketClientService webSocketClientService;
-
-    private String webhookUrl="http://35.175.221.232:5000/webhook_create_user";
+    @Value("${URL_WEBHOOK}")
+    private String webhookUrl;
     @Autowired
     public UserService(UserRepository userRepository, WebSocketClientService webSocketClientService, RestTemplate restTemplate,
                        PasswordEncoder passwordEncoder) {
@@ -44,7 +44,7 @@ public class UserService {
             User createdUser = userRepository.save(user);
             //EVENT WEBSOCKET
             System.out.println("Enviando evento WebSocket para creación de usuario...");
-            webSocketClientService.sendEvent("CREATE", createdUser);
+            webSocketClientService.sendEvent("CREATED", createdUser);
             notifyWebhook(createdUser);
             return createdUser;
         } catch (DataAccessException e) {
