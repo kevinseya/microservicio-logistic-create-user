@@ -64,7 +64,7 @@ public class User {
         this.id = id;
     }
 
-    // Getter y Setter para name
+    // Getter y Setter for name
     public String getName() {
         return name;
     }
@@ -73,7 +73,7 @@ public class User {
         this.name = name;
     }
 
-    // Getter y Setter para lastname
+    // Getter y Setter for lastname
     public String getLastname() {
         return lastname;
     }
@@ -82,7 +82,7 @@ public class User {
         this.lastname = lastname;
     }
 
-    // Getter y Setter para email
+    // Getter y Setter for email
     public String getEmail() {
         return email;
     }
@@ -91,7 +91,7 @@ public class User {
         this.email = email;
     }
 
-    // Getter y Setter para phone
+    // Getter y Setter for phone
     public String getPhone() {
         return phone;
     }
@@ -100,7 +100,7 @@ public class User {
         this.phone = phone;
     }
 
-    // Getter y Setter para password
+    // Getter y Setter for password
     public String getPassword() {
         return password;
     }
@@ -109,7 +109,7 @@ public class User {
         this.password = password;
     }
 
-    // Getter y Setter para role
+    // Getter y Setter for role
     public String getRole() {
         return role;
     }
@@ -118,7 +118,7 @@ public class User {
         this.role = role;
     }
 
-    //Getter y Setter para active
+    //Getter y Setter for active
     public Boolean getActive() { return active; }
 
     public void setActive(Boolean active) { this.active = active; }
