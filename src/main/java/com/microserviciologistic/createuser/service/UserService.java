@@ -67,7 +67,7 @@ public class UserService {
                     user.getId(), user.getName(), user.getLastname(), user.getEmail(), user.getRole(), Instant.now().toString());
 
             HttpEntity<String> request = new HttpEntity<>(jsonBody, headers);
-            System.out.println("******Intentando conectar a webhook URL: " + webhookUrl);
+            System.out.println("******Reconnect to webhook URL: " + webhookUrl);
             ResponseEntity<String> response = restTemplate.exchange(webhookUrl, HttpMethod.POST, request, String.class);
 
             if (response.getStatusCode() == HttpStatus.CREATED) {
